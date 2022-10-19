@@ -4,15 +4,23 @@
       <!--Import Google Icon Font-->
       <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
       <!--Import materialize.css-->
-      <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+      <link type="text/css" rel="stylesheet" href="materialize/css/materialize.min.css"  media="screen,projection"/>
 
       <!--Let browser know website is optimized for mobile-->
       <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <script type="text/javascript" src="operaciones.js"></script>
     </head>
 
     <body>
-      <div class="input-field col s12">
-        <select>
+        <div class="input-field col s12 m6">
+          <select>
+            <option value="" >Choose your option</option>
+            <option value="1">Option 1</option>
+            <option value="2">Option 2</option>
+            <option value="3">Option 3</option>
+          </select>
+          
+         <!--<select>
           <option value="" disabled selected>Métrica</option>
           <option value="1">Correlación de Pearson</option>
           <option value="2">Distancia coseno</option>
@@ -22,17 +30,16 @@
           <option value="" disabled selected>Tipo predicción</option>
           <option value="1">Simple</option>
           <option value="2">Diferencia con la media</option>
-        </select>
-        <div class="input-field col s6">
-          <input id="ruta" type="file" class="validate">
-        </div>
-        <div class="input-field col s6">
-          <input id="vecinos" type="number" class="validate">
-          <label for="vecinos">Número vecinos</label>
-        </div>
-      </div>
-      
+        </select>-->
+        <!--</div>
+        <div class="col s6">
+        <input id="ruta" type="file" class="validate">
+        <input id="vecinos" type="number" class="validate">
+          <label for="vecinos">Número vecinos</label>-->
+          
+      </div>      
       <!--JavaScript at end of body for optimized loading-->
       <script type="text/javascript" src="materialize/js/materialize.min.js"></script>
+      
     </body>
   </html>
