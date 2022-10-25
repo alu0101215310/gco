@@ -3,28 +3,49 @@
     <head>
       <!--Import Google Icon Font-->
       <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
       <link rel="stylesheet" href="stylesheet.css">
-      <script type="text/javascript" src="operaciones.js"></script>
       
     </head>
 
     <body>
-       <h1>Sistemas de recomendación</h1> 
-         <select>
-          <option value="" disabled selected>Métrica</option>
-          <option value="1">Correlación de Pearson</option>
-          <option value="2">Distancia coseno</option>
-          <option value="3">Distancia euclídea</option>
-        </select>
-        <select>
-          <option value="" disabled selected>Tipo predicción</option>
-          <option value="1">Simple</option>
-          <option value="2">Diferencia con la media</option>
-        </select>
-        
-        <input id="ruta" type="file" class="validate">
-        <input id="vecinos" type="number" class="validate">
-          <label for="vecinos">Número vecinos</label>    
+        <h1>Sistemas de recomendación</h1> 
+        <div>
+          <div class="col-3 mb-3">
+            <label class="form-label">Elija la métrica a usar:</label>
+            <select id="metrica" class="mb-3 form-select" required>
+              <option value="" disabled selected>Escoja una opción</option>
+              <option value="1">Correlación de Pearson</option>
+              <option value="2">Distancia coseno</option>
+              <option value="3">Distancia euclídea</option>
+            </select>
+          </div>
+
+          <div class="col-3 mb-3">
+            <label class="form-label">Elija el tipo de predicción:</label>
+            <select id="tipo_prediccion" class="mb-3 form-select" required>
+              <option value="" disabled selected>Escoja una opción</option>
+              <option value="1">Simple</option>
+              <option value="2">Diferencia con la media</option>
+            </select>
+          </div>
+
+          <div class="col-3 mb-3">
+            <label class="form-label">Escoja el fichero de datos:</label>
+            <input id="ruta" type="file" class="form-control" required>
+          </div>
+
+          <div class="col-3 mb-3">
+            <label class="form-label">Establece el numero de vecinos:</label>
+            <input id="vecinos" type="number" class="form-control" required>
+          </div>
+
+          <div>
+            <button type="button" onclick="main()" class="btn btn-primary col-auto">Ejecutar</button>
+          </div>
+
+        </div> 
       
+        <script src="operaciones.js"></script>
     </body>
   </html>
