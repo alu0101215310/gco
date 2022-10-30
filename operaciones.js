@@ -37,6 +37,31 @@ function calcular_media(matriz) {
   }
   return medias
 }
+
+function correlacion_pearson(matriz, usu1, usu2) {
+  let media = calcular_media(matriz);
+  let aux = 0;
+  for (let j = 0; j < matriz[usu1].length; j++) {
+    if ((matriz[usu1][j] != "-")&&(matriz[usu2][j] != "-")) {
+      aux = aux + ((matriz[usu1][j] - media[usu1])*(matriz[usu2][j] - media[usu2]));
+      aux2 = aux2 + ((Math.sqrt(matriz[usu1][j] - Math.pow(media[usu1],2))) * (Math.sqrt(Math.sqrt(matriz[usu1][j] - Math.pow(media[usu1],2)))));
+    }
+  }
+  return aux/aux2;
+}
+function distancia_coseno(matriz) {
+  let aux = 0;
+  for (let j = 0; j < matriz[usu1].length; j++) {
+    if ((matriz[usu1][j] != "-")&&(matriz[usu2][j] != "-")) {
+      aux = aux + ((matriz[usu1][j])*(matriz[usu2][j]));
+      aux2 = aux2 + (Math.pow(matriz[usu1][j],2)) * (Math.sqrt(Math.pow(matriz[usu2][j],2)));
+    }
+  }
+  return aux/aux2;
+}
+function distancia_euclidea(matriz) {
+
+}
   
 // Función principal que muestra el sistema de recomendación escogido
 function main() {
