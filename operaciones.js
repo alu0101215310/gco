@@ -3,8 +3,7 @@ var fichero = document.getElementById('ruta')
 
 // Creamos la variable matriz principal para almacenar la matriz leida por fichero
 var matriz = []
-// Vector donde se almacenan las posiciones faltantes
-var faltantes = []
+var faltantes_total = []
 var similitudes = []
 fichero.addEventListener('change', function(e) {
   matriz = []
@@ -21,28 +20,35 @@ fichero.addEventListener('change', function(e) {
   reader.readAsText(fichero.files[0])
 }, false)
 
+function faltantes(usuario) {
+  let fal = []
+  for (let j = 0; j < matriz[0].length; j++) {
+    if (matriz[usuario][j].trim() == '-') {
+      fal.push(j)
+    }
+  }
+  return fal
+}
 // Calculamos la media de cada fila
 function calcular_media(matriz) {
   // Vector donde almacenaremos los resultados
   let medias = []
-  // Recorremos la matriz encontrando todas las posiciones faltantes
   for (let i = 0; i < matriz.length; i++) {
     for (let j = 0; j < matriz[i].length; j++) {
       if (matriz[i][j].trim() == '-') {
         
-        if (!faltantes.includes(j)) {
-          faltantes.push(j)
+        if (!faltantes_total.includes(j)) {
+          faltantes_total.push(j)
         }
       }
     }
   }
-  //console.log(faltantes);
   // Recorremos la matriz y calculamos la media
   for (let i = 0; i < matriz.length; i++) {
     let cont = 0
     let sum = 0
     for (let j = 0; j < matriz[i].length; j++) {
-      if (!faltantes.includes(j)) {
+      if (!faltantes_total.includes(j)) {
         sum = sum + parseInt(matriz[i][j])
         cont++
       } 
@@ -50,6 +56,7 @@ function calcular_media(matriz) {
     medias.push(sum/cont)
   }
   return medias
+  
 }
 // Función que calcula la correlación de Pearson
 function correlacion_pearson(matriz, usu1, usu2) {
@@ -58,7 +65,7 @@ function correlacion_pearson(matriz, usu1, usu2) {
   let aux2 = 0
   let aux3 = 0
   for (let j = 0; j < matriz[usu1].length; j++) {
-    if (!faltantes.includes(j)) {
+    if (!faltantes_total.includes(j)) {
       aux = aux + ((matriz[usu1][j] - media[usu1])*(matriz[usu2][j] - media[usu2]))
       aux2 = aux2 + (Math.pow(matriz[usu1][j] - media[usu1],2))
       aux3 = aux3 + (Math.pow(matriz[usu2][j] - media[usu2],2))
@@ -73,7 +80,7 @@ function distancia_coseno(matriz, usu1, usu2) {
   let aux2 = 0
   let aux3 = 0
   for (let j = 0; j < matriz[usu1].length; j++) {
-    if (!faltantes.includes(j)) {
+    if (!faltantes_total.includes(j)) {
       aux = aux + ((matriz[usu1][j])*(matriz[usu2][j]))
       aux2 = aux2 + (Math.pow(matriz[usu1][j],2))
       aux3 = aux3 + (Math.pow(matriz[usu2][j],2))
@@ -86,7 +93,7 @@ function distancia_coseno(matriz, usu1, usu2) {
 function distancia_euclidea(matriz, usu1, usu2) {
   let aux = 0;
   for (let j = 0; j < matriz[usu1].length; j++) {
-    if (!faltantes.includes(j)) {
+    if (!faltantes_total.includes(j)) {
       aux = aux + Math.pow(matriz[usu1][j] - matriz[usu2][j], 2)
     }
   }
@@ -227,6 +234,7 @@ function main() {
     }**/
     cal_similitudes()
     console.log(similitudes)
+    console.log(faltantes_total)
     for (let i = 0; i < similitudes[0].length; i++) {
       /**const newtext = document.createTextNode("Vecino " + (i+1) + ": " + similitudes[i] + "\n")
       const p1 = document.getElementById("print_matriz");
