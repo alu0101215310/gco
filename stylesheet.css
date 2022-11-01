@@ -5,3 +5,7 @@ html {
   -o-background-size: cover;
   background-size: cover;
 }
+
+p {
+  white-space: pre-wrap;
+}
