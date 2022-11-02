@@ -5,6 +5,7 @@ var fichero = document.getElementById('ruta')
 var matriz = []
 var faltantes_total = []
 var similitudes = []
+var vecinos = [];
 fichero.addEventListener('change', function(e) {
   matriz = []
   let reader = new FileReader()
@@ -101,60 +102,110 @@ function distancia_euclidea(matriz, usu1, usu2) {
 }
 
 // Calculamos la predicción Simple
-function simple(matriz,usuario, item, num_vecinos, media) {
-  let vecinos = [];
+function simple(matriz,usuario, item, num_vecinos) {
+  let aux_vecinos = [];
+  let max = 0;
   let metrica = document.getElementById('metrica').value
+  let aux_similitudes = [];
+  let index = 0
+  for(let i = 0; i < similitudes[usuario].length; i++) {
+    aux_similitudes.push(similitudes[usuario][i])
+  }
+  
   if (num_vecinos < 3) {
     alert("¡Debe elegir 3 vecinos como mínimo!");
     throw new Error();
   } else { 
       switch (metrica) {
         case '1':
-          for (let i = 0; i < num_vecinos - 1; i++) {
-            let aux_similitudes = similitudes;
-            const index = aux_similitudes.indexOf(Math.max(...aux_similitudes));
-            vecinos[usuario].push(index);
+          for (let i = 0; i < num_vecinos; i++) {
+            max = Math.max(...aux_similitudes)
+            index = similitudes[usuario].indexOf(max);
+            aux_vecinos.push(index + 1);
             aux_similitudes.splice(index, 1);
           }
+          vecinos[usuario] = aux_vecinos
           break;
-          
 
         case '2':
-          for (let i = 0; i < num_vecinos - 1; i++) {
-            let aux_similitudes = similitudes;
-            const index = aux_similitudes.indexOf(Math.max(...aux_similitudes));
-            vecinos[usuario].push(index);
+          for (let i = 0; i < num_vecinos ; i++) {
+            max = Math.max(...aux_similitudes)
+            index = similitudes[usuario].indexOf(max);
+            aux_vecinos.push(index + 1);
             aux_similitudes.splice(index, 1);
           }
+          vecinos[usuario] = aux_vecinos
           break;
           
         case '3':
-          for (let i = 0; i < num_vecinos - 1; i++) {
-            let aux_similitudes = similitudes;
-            const index = aux_similitudes.indexOf(Math.max(...aux_similitudes));
-            vecinos[usuario].push(index);
+          
+          for (let i = 0; i < num_vecinos; i++) {
+            max = Math.max(...aux_similitudes)
+            index = similitudes[usuario].indexOf(max);
+            aux_vecinos.push(index + 1);
             aux_similitudes.splice(index, 1);
           }
+          vecinos[usuario] = aux_vecinos 
           break;
           
         }
     }
+    document.getElementById('print_matriz').innerHTML = document.getElementById('print_matriz').innerHTML + "\nVecinos elegidos " + vecinos[usuario]
     console.log(vecinos[usuario])
     let num = 0;
     let den = 0;    
     // Calculamos la formula
     for (let i = 0; i < num_vecinos; i++) {
-        num = num + (similitudes[usuario][vecinos[usuario][i]]*(matriz[vecinos[usuario][i]][item] - media[vecinos[usuario][i]]))
+        num = num + (similitudes[usuario][vecinos[usuario][i]]*matriz[vecinos[usuario][i]][item])
         den = den + Math.abs(similitudes[usuario][vecinos[usuario][i]])
     }
     let resultado = num/den;
+    console.log(resultado)
     return resultado;
 }
 
 // Calculamos la prediccion de la diferencia con la media
-function diferencia_media(matriz, medias, u, item, num_vecinos) {
+function diferencia_media(matriz, medias, usuario, item, num_vecinos) {
   let num = 0;
   let den = 0;
+  let aux_vecinos = [];
+  let max = 0;
+  let metrica = document.getElementById('metrica').value
+  let aux_similitudes = [];
+  let index = 0
+  switch (metrica) {
+    case '1':
+      for (let i = 0; i < num_vecinos; i++) {
+        max = Math.max(...aux_similitudes)
+        index = similitudes[usuario].indexOf(max);
+        aux_vecinos.push(index + 1);
+        aux_similitudes.splice(index, 1);
+      }
+      vecinos[usuario] = aux_vecinos
+      break;
+
+    case '2':
+      for (let i = 0; i < num_vecinos ; i++) {
+        max = Math.max(...aux_similitudes)
+        index = similitudes[usuario].indexOf(max);
+        aux_vecinos.push(index + 1);
+        aux_similitudes.splice(index, 1);
+      }
+      vecinos[usuario] = aux_vecinos
+      break;
+      
+    case '3':
+      
+      for (let i = 0; i < num_vecinos; i++) {
+        max = Math.max(...aux_similitudes)
+        index = similitudes[usuario].indexOf(max);
+        aux_vecinos.push(index + 1);
+        aux_similitudes.splice(index, 1);
+      }
+      vecinos[usuario] = aux_vecinos 
+      break;
+      
+    }
   // Calculamos la formula
   for (let i = 0; i < num_vecinos; i++) {
     num = num + (similitudes[i][1] * (parseInt(matriz[similitudes[i][0]][item]) - medias[similitudes[i][0]]))
@@ -195,13 +246,12 @@ function cal_similitudes (){
       }
     aux = []
   }
-  /**for (let i = 0; i < matriz[0].length; i++) {
-    var filtered = similitudes[i].filter(function (el) {
-      return el != undefined;
-    });
+  for (let i = 0; i < matriz.length; i++) {
+    document.getElementById('print_matriz').innerHTML = document.getElementById('print_matriz').innerHTML + "\nUsuario " + (i+1)
+    for (let j = 0; j < similitudes[0].length; j++) {
+      document.getElementById('print_matriz').innerHTML = document.getElementById('print_matriz').innerHTML + "\r\n" + "Vecino " + (j+1) + ": " + similitudes[i][j]
+    }
   }
-    similitudes = filtered
-  **/
 }
 
 // Función principal que muestra el sistema de recomendación escogido
@@ -211,36 +261,11 @@ function main() {
     alert("No ha sido posible procesar la matriz")
     throw new Error()
   } else {
-    /**let metrica = document.getElementById('metrica').value
-    console.log(calcular_media(matriz))
-    switch (metrica) {
-      case '1':
-        console.log(correlacion_pearson(matriz,0,1))
-        break;
-      case '2':
-        console.log(distancia_coseno(matriz,0,1))
-        break;
-      case '3':
-        console.log(distancia_euclidea(matriz,0,1))
-        break;
-    }**/
-    /**let tipo_prediccion = document.getElementById('tipo_prediccion').value
-    switch (tipo_prediccion) {
-      case '1':
-        
-        break;
-      case '2':
-        break;
-    }**/
     cal_similitudes()
     console.log(similitudes)
-    console.log(faltantes_total)
-    for (let i = 0; i < similitudes[0].length; i++) {
-      /**const newtext = document.createTextNode("Vecino " + (i+1) + ": " + similitudes[i] + "\n")
-      const p1 = document.getElementById("print_matriz");
-      p1.appendChild(newtext);**/
-      document.getElementById('print_matriz').innerHTML = document.getElementById('print_matriz').innerHTML + "\r\n" + "Vecino " + (i+1) + ": " + similitudes[0][i]
-    }
+    simple(matriz,0,4,3)
+    //diferencia_media(matriz,calcular_media(matriz),0,4,3)
+    
 
   }
 }
