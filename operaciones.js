@@ -4,7 +4,7 @@ var fichero = document.getElementById('ruta')
 // Creamos la variable matriz principal para almacenar la matriz leida por fichero
 var matriz = []
 var faltantes_total = []
-var similitudes = []
+//var similitudes = []
 var vecinos = [];
 fichero.addEventListener('change', function(e) {
   matriz = []
@@ -34,16 +34,6 @@ function faltantes(usuario) {
 function calcular_media(matriz) {
   // Vector donde almacenaremos los resultados
   let medias = []
-  for (let i = 0; i < matriz.length; i++) {
-    for (let j = 0; j < matriz[i].length; j++) {
-      if (matriz[i][j].trim() == '-') {
-        
-        if (!faltantes_total.includes(j)) {
-          faltantes_total.push(j)
-        }
-      }
-    }
-  }
   // Recorremos la matriz y calculamos la media
   for (let i = 0; i < matriz.length; i++) {
     let cont = 0
@@ -60,57 +50,100 @@ function calcular_media(matriz) {
   
 }
 // Función que calcula la correlación de Pearson
-function correlacion_pearson(matriz, usu1, usu2) {
+function correlacion_pearson(matriz, usu1) { 
+  let similitudes = []
   let media = calcular_media(matriz)
   let aux = 0
   let aux2 = 0
   let aux3 = 0
-  for (let j = 0; j < matriz[usu1].length; j++) {
-    if (!faltantes_total.includes(j)) {
-      aux = aux + ((matriz[usu1][j] - media[usu1])*(matriz[usu2][j] - media[usu2]))
-      aux2 = aux2 + (Math.pow(matriz[usu1][j] - media[usu1],2))
-      aux3 = aux3 + (Math.pow(matriz[usu2][j] - media[usu2],2))
+  for (let i = 0; i < matriz.length; i++) {
+    if (i != usu1) {
+      for (let j = 0; j < matriz[usu1].length; j++) {
+        if (!faltantes_total.includes(j)) {
+          aux = aux + ((matriz[usu1][j] - media[usu1])*(matriz[i][j] - media[i]))
+          aux2 = aux2 + (Math.pow(matriz[usu1][j] - media[usu1],2))
+          aux3 = aux3 + (Math.pow(matriz[i][j] - media[i],2))
+        }
+      }
+      aux2 = Math.sqrt(aux2) * Math.sqrt(aux3)
+      let vec = {
+        v: i,
+        valor: aux/aux2
+      }
+      aux = 0;
+      aux2 = 0;
+      aux3 = 0;
+      similitudes.push(vec)
     }
+    
   }
-  aux2 = Math.sqrt(aux2) * Math.sqrt(aux3)
-  return aux/aux2
+  for (let i = 0; i < similitudes.length; i++) {
+    document.getElementById('print_matriz').innerHTML = document.getElementById('print_matriz').innerHTML + "\nSimilitud usuario " + usu1 + "," + similitudes[i].v + ": " + similitudes[i].valor
+  }
+  return(similitudes)
 }
 // Función que calcula la distancia coseno
-function distancia_coseno(matriz, usu1, usu2) {
+function distancia_coseno(matriz, usu1) {
+  let similitudes = []
   let aux = 0
   let aux2 = 0
   let aux3 = 0
-  for (let j = 0; j < matriz[usu1].length; j++) {
-    if (!faltantes_total.includes(j)) {
-      aux = aux + ((matriz[usu1][j])*(matriz[usu2][j]))
-      aux2 = aux2 + (Math.pow(matriz[usu1][j],2))
-      aux3 = aux3 + (Math.pow(matriz[usu2][j],2))
+  for (let i = 0; i < matriz.length; i++) {
+    if (i != usu1) {
+      for (let j = 0; j < matriz[usu1].length; j++) {
+        if (!faltantes_total.includes(j)) {
+          aux = aux + ((matriz[usu1][j])*(matriz[i][j]))
+          aux2 = aux2 + (Math.pow(matriz[usu1][j],2))
+          aux3 = aux3 + (Math.pow(matriz[i][j],2))
+        }
+      }
+      aux2 = Math.sqrt(aux2) * Math.sqrt(aux3)
+      let vec = {
+        v: i,
+        valor: aux/aux2
+      }
+      aux = 0;
+      aux2 = 0;
+      aux3 = 0;
+      similitudes.push(vec)
     }
   }
-  aux2 = Math.sqrt(aux2) * Math.sqrt(aux3)
-  return aux/aux2
+  for (let i = 0; i < similitudes.length; i++) {
+    document.getElementById('print_matriz').innerHTML = document.getElementById('print_matriz').innerHTML + "\nSimilitud usuario " + i + "," + similitudes[i].v + ": " + similitudes[i].valor
+  }
+  return similitudes
 }
 // Función que calcula la distancia euclidea
-function distancia_euclidea(matriz, usu1, usu2) {
+function distancia_euclidea(matriz, usu1) {
+  let similitudes = []
   let aux = 0;
-  for (let j = 0; j < matriz[usu1].length; j++) {
-    if (!faltantes_total.includes(j)) {
-      aux = aux + Math.pow(matriz[usu1][j] - matriz[usu2][j], 2)
+  for (let i = 0; i < matriz.length; i++) {
+    if (i != usu1) {
+      for (let j = 0; j < matriz[usu1].length; j++) {
+        if (!faltantes_total.includes(j)) {
+          aux = aux + Math.pow(matriz[usu1][j] - matriz[i][j], 2)
+        }
+      }
+      let vec = {
+        v: i,
+        valor: Math.sqrt(aux)
+      }
+      aux = 0;
+      similitudes.push(vec)
     }
   }
-  return Math.sqrt(aux)
+  for (let i = 0; i < similitudes.length; i++) {
+    document.getElementById('print_matriz').innerHTML = document.getElementById('print_matriz').innerHTML + "\nSimilitud usuario " + i + "," + similitudes[i].v + ": " + similitudes[i].valor
+  }
+  return similitudes
 }
 
 // Calculamos la predicción Simple
 function simple(matriz,usuario, item, num_vecinos) {
-  let aux_vecinos = [];
-  let max = 0;
+
   let metrica = document.getElementById('metrica').value
-  let aux_similitudes = [];
-  let index = 0
-  for(let i = 0; i < similitudes[usuario].length; i++) {
-    aux_similitudes.push(similitudes[usuario][i])
-  }
+  let similitudes = []
+  let vecinos = []
   
   if (num_vecinos < 3) {
     alert("¡Debe elegir 3 vecinos como mínimo!");
@@ -118,110 +151,104 @@ function simple(matriz,usuario, item, num_vecinos) {
   } else { 
       switch (metrica) {
         case '1':
-          for (let i = 0; i < num_vecinos; i++) {
-            max = Math.max(...aux_similitudes)
-            index = similitudes[usuario].indexOf(max);
-            aux_vecinos.push(index + 1);
-            aux_similitudes.splice(index, 1);
+          similitudes = correlacion_pearson(matriz,usuario)
+          similitudes = similitudes.sort((a,b) => b.valor - a.valor)
+          similitudes.splice(num_vecinos, similitudes.length)
+          console.log(similitudes)
+          for(let i  = 0; i < similitudes.length; i++) {
+            vecinos[i] = similitudes[i].v
           }
-          vecinos[usuario] = aux_vecinos
+          document.getElementById('print_matriz').innerHTML = document.getElementById('print_matriz').innerHTML + "\nVecinos elegidos " + vecinos
           break;
 
         case '2':
-          for (let i = 0; i < num_vecinos ; i++) {
-            max = Math.max(...aux_similitudes)
-            index = similitudes[usuario].indexOf(max);
-            aux_vecinos.push(index + 1);
-            aux_similitudes.splice(index, 1);
+          similitudes = distancia_coseno(matriz,usuario)
+          similitudes = similitudes.sort((a,b) => b.valor - a.valor)
+          similitudes.splice(num_vecinos, similitudes.length)
+          for(let i  = 0; i < similitudes.length; i++) {
+            vecinos[i] = similitudes[i].v
           }
-          vecinos[usuario] = aux_vecinos
+          document.getElementById('print_matriz').innerHTML = document.getElementById('print_matriz').innerHTML + "\nVecinos elegidos " + vecinos
           break;
           
         case '3':
-          
-          for (let i = 0; i < num_vecinos; i++) {
-            max = Math.max(...aux_similitudes)
-            index = similitudes[usuario].indexOf(max);
-            aux_vecinos.push(index + 1);
-            aux_similitudes.splice(index, 1);
+          similitudes = distancia_euclidea(matriz,usuario)
+          similitudes = similitudes.sort((a,b) => b.valor - a.valor)
+          similitudes.splice(num_vecinos, similitudes.length)
+          for(let i  = 0; i < similitudes.length; i++) {
+            vecinos[i] = similitudes[i].v
           }
-          vecinos[usuario] = aux_vecinos 
+          document.getElementById('print_matriz').innerHTML = document.getElementById('print_matriz').innerHTML + "\nVecinos elegidos " + vecinos
           break;
           
-        }
+      }
     }
-    document.getElementById('print_matriz').innerHTML = document.getElementById('print_matriz').innerHTML + "\nVecinos elegidos " + vecinos[usuario]
-    console.log(vecinos[usuario])
-    let num = 0;
-    let den = 0;    
-    // Calculamos la formula
+
+    let aux = 0;
+    let aux2 = 0;
     for (let i = 0; i < num_vecinos; i++) {
-        num = num + (similitudes[usuario][vecinos[usuario][i]]*matriz[vecinos[usuario][i]][item])
-        den = den + Math.abs(similitudes[usuario][vecinos[usuario][i]])
+      if (matriz[similitudes[i].v][item].trim() != "-") {
+        aux =  aux + similitudes[i].valor * matriz[similitudes[i].v][item]
+        aux2 = aux2 + Math.abs(similitudes[i].valor)
+      }
     }
-    let resultado = num/den;
-    console.log(resultado)
-    return resultado;
+    let prediccion = aux/aux2
+    
+    prediccion = prediccion.toFixed(2)
+    document.getElementById('print_matriz').innerHTML = document.getElementById('print_matriz').innerHTML + "\nPrediccion del valor " + usuario + "," + item + ": " + prediccion
+    return prediccion
+  
 }
 
 // Calculamos la prediccion de la diferencia con la media
-function diferencia_media(matriz, medias, usuario, item, num_vecinos) {
-  let num = 0;
-  let den = 0;
-  let aux_vecinos = [];
-  let max = 0;
+function diferencia_media(matriz,usuario, item, num_vecinos) {
   let metrica = document.getElementById('metrica').value
-  let aux_similitudes = [];
-  let index = 0
+  let medias = calcular_media(matriz)
   switch (metrica) {
     case '1':
-      for (let i = 0; i < num_vecinos; i++) {
-        max = Math.max(...aux_similitudes)
-        index = similitudes[usuario].indexOf(max);
-        aux_vecinos.push(index + 1);
-        aux_similitudes.splice(index, 1);
+      similitudes = correlacion_pearson(matriz,usuario)
+      similitudes = similitudes.sort((a,b) => b.valor - a.valor)
+      similitudes.splice(num_vecinos, similitudes.length)
+      console.log(similitudes)
+      for(let i  = 0; i < similitudes.length; i++) {
+        vecinos[i] = similitudes[i].v
       }
-      vecinos[usuario] = aux_vecinos
+      document.getElementById('print_matriz').innerHTML = document.getElementById('print_matriz').innerHTML + "\nVecinos elegidos " + vecinos
       break;
 
     case '2':
-      for (let i = 0; i < num_vecinos ; i++) {
-        max = Math.max(...aux_similitudes)
-        index = similitudes[usuario].indexOf(max);
-        aux_vecinos.push(index + 1);
-        aux_similitudes.splice(index, 1);
-      }
-      vecinos[usuario] = aux_vecinos
+      similitudes = distancia_coseno(matriz,usuario)
+      similitudes = similitudes.sort((a,b) => b.valor - a.valor)
+      similitudes.splice(num_vecinos, similitudes.length)
       break;
       
     case '3':
-      
-      for (let i = 0; i < num_vecinos; i++) {
-        max = Math.max(...aux_similitudes)
-        index = similitudes[usuario].indexOf(max);
-        aux_vecinos.push(index + 1);
-        aux_similitudes.splice(index, 1);
-      }
-      vecinos[usuario] = aux_vecinos 
+      similitudes = distancia_euclidea(matriz,usuario)
+      similitudes = similitudes.sort((a,b) => b.valor - a.valor)
+      similitudes.splice(num_vecinos, similitudes.length)
       break;
       
-    }
-  // Calculamos la formula
-  for (let i = 0; i < num_vecinos; i++) {
-    num = num + (similitudes[i][1] * (parseInt(matriz[similitudes[i][0]][item]) - medias[similitudes[i][0]]))
-    den = den + Math.abs(similitudes[i][1])
   }
-  let resultado = medias[u] + num/den
-  return resultado;
+  // Calculamos la formula
+    let aux = 0;
+    let aux2 = 0;
+    for (let i = 0; i < num_vecinos; i++) {
+      if (matriz[similitudes[i].v][item].trim() != "-") {
+        aux =  aux + similitudes[i].valor * (matriz[similitudes[i].v][item] - medias[i])
+        aux2 = aux2 + Math.abs(similitudes[i].valor)
+      }
+    }
+    let prediccion = aux/aux2
+    prediccion = prediccion.toFixed(2)
+    document.getElementById('print_matriz').innerHTML = document.getElementById('print_matriz').innerHTML + "\nPrediccion del valor " + usuario + "," + item + ": " + prediccion
+    return prediccion
 }
 
 function cal_similitudes (){
   let metrica = document.getElementById('metrica').value
   similitudes = []
   let aux = []
-  /**for(let i=0; i<matriz.length -1; i++) {
-    similitudes[i] = push([]);
-  }**/
+
   console.log(similitudes)
   for (let i = 0; i < matriz[0].length; i++) {
     for(let j = 0; j < matriz[0].length; j++) {
@@ -261,11 +288,44 @@ function main() {
     alert("No ha sido posible procesar la matriz")
     throw new Error()
   } else {
-    cal_similitudes()
-    console.log(similitudes)
-    simple(matriz,0,4,3)
-    //diferencia_media(matriz,calcular_media(matriz),0,4,3)
-    
+    for (let i = 0; i < matriz.length; i++) {
+      for (let j = 0; j < matriz[i].length; j++) {
+        if (matriz[i][j].trim() == '-') {
+          if (!faltantes_total.includes(j)) {
+            faltantes_total.push(j)
+          }
+        }
+      }
+    }
+    faltantes_total = faltantes_total.sort((a,b) => a-b)
 
+    
+    let pred = document.getElementById('tipo_prediccion').value
+    let n_vecinos = document.getElementById('vecinos').value
+    let r_matriz = matriz;
+    for(let i = 0; i < matriz.length; i++) {
+      for (let j = 0; j < matriz[0].length; j++) {
+        if (matriz[i][j].trim() == '-') {
+          switch (pred) {
+            case "1":
+              r_matriz[i][j] = simple(matriz, i, j, n_vecinos)
+              console.log(r_matriz)
+              break;
+            case "2":
+              r_matriz[i][j] = diferencia_media(matriz, i, j, 3)
+              console.log(r_matriz)
+              break;
+          }
+        }
+      }
+    }
+    document.getElementById('print_matriz').innerHTML = document.getElementById('print_matriz').innerHTML + "\nMatriz resuelta:"
+    for(let i = 0; i < matriz.length; i++) {
+      for (let j = 0; j < matriz[0].length; j++)
+        r_matriz[i][j] = r_matriz[i][j].trim()
+    }
+    for(let i = 0; i < matriz.length; i++) {
+      document.getElementById('print_matriz').innerHTML = document.getElementById('print_matriz').innerHTML + "\n" + r_matriz[i]
+    }
   }
 }
