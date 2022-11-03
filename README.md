@@ -30,20 +30,22 @@ Estas son las siguientes:
   
  
  ### Ejemplo de uso
- 
-Parametros introducidos:
 
- Métrica: Correlación de Pearson
+ A continuación se mostrará un ejemplo de como habría que usar la aplicación y cual sería su resultado.
  
- Tipo de predicción: Simple
- 
- Fichero: matrix-5-10.txt
- 
- Numero de vecinos(3 o más si se escoge la prediccion simple): 3
+  #### Parametros introducidos:
 
-Parametros de salida: 
+  * Métrica: Correlación de Pearson
+ 
+  * Tipo de predicción: Simple
+ 
+  * Fichero: matrix-5-10.txt
+ 
+  * Numero de vecinos(3 o más si se escoge la prediccion simple): 3
 
- Matriz resuelta:
+  #### Parametros de salida: 
+
+  * Matriz resuelta:
 
  4,1.02,0.28,0,2,2.10,3,4.43,0,-1.13  
  -2.01,4,4,1,1,3,0,-3.68,-0.87,2  
