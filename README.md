@@ -1,7 +1,8 @@
 
 # Sistemas de recomendación. Filtrado colaborativo
 ## Alberto Rios de la Rosa - alu0101235929@ull.edu.es
-## PONGAN SUS NOMBRES Y ALU
+## Daniel Hernández Fajardo - alu0101320489@ull.edu.es
+## Alejandro Pérez Álvarez - alu0101215310@ull.edu.es
 
 ### Descripción del código desarrollado
 
