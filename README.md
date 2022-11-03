@@ -33,10 +33,14 @@ Estas son las siguientes:
  
 Parametros introducidos:
 
-  Fichero:
-  Métrica: 
-  Número de vecinos (Tiene que ser 3 o mayor si se escoge como tipo de predicción "Predicción simple"): 
-  Tipo de predicción: 
+ Métrica:
+ 
+ Tipo de predicción:
+ 
+ Fichero:
+ 
+ Numero de vecinos(3 o más si se escoge la prediccion simple):
+
  
  HAY QUE PONER UN EJEMPLO DE USO AQUI, LOS VALORES INTRODUCIDOS Y LA SALIDA
  
