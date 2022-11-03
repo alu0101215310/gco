@@ -1,7 +1,7 @@
-# gco
-##Sistemas de recomendación
-##Alberto Rios de la Rosa - alu0101235929@ull.edu.es
-##PONGAN SUS NOMBRES Y ALU
+
+# Sistemas de recomendación. Filtrado colaborativo
+## Alberto Rios de la Rosa - alu0101235929@ull.edu.es
+## PONGAN SUS NOMBRES Y ALU
 
 ### Descripción del código desarrollado
 
