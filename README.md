@@ -33,15 +33,20 @@ Estas son las siguientes:
  
 Parametros introducidos:
 
- Métrica:
+ Métrica: Correlación de Pearson
  
- Tipo de predicción:
+ Tipo de predicción: Simple
  
- Fichero:
+ Fichero: matrix-5-10.txt
  
- Numero de vecinos(3 o más si se escoge la prediccion simple):
+ Numero de vecinos(3 o más si se escoge la prediccion simple): 3
 
- 
- HAY QUE PONER UN EJEMPLO DE USO AQUI, LOS VALORES INTRODUCIDOS Y LA SALIDA
- 
-Parametros de salida:
+Parametros de salida: 
+
+ Matriz resuelta:
+
+ 4,1.02,0.28,0,2,2.10,3,4.43,0,-1.13
+ -2.01,4,4,1,1,3,0,-3.68,-0.87,2
+ 2,5,1,2,1,5,5,5,2,0
+ 1,4,1,3,1,-1.87,1,0,0,0
+ 0,3,4,0,0,5,5,4,5,-0.38
