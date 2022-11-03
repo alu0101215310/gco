@@ -34,7 +34,7 @@ Estas son las siguientes:
 Parametros introducidos:
 
   Fichero:
-  Métrica: Correlación de Pearson
+  Métrica: 
   Número de vecinos (Tiene que ser 3 o mayor si se escoge como tipo de predicción "Predicción simple"): 
   Tipo de predicción: 
  
